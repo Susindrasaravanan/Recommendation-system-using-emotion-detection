@@ -1,0 +1,65 @@
+/* Apply styles to the body for background image */
+body {
+    background-image: url('/static/images/bkg.jpg');
+    background-size: cover; /* Cover the entire viewport */
+    background-position: center; /* Center the background image */
+}
+
+h1,p {
+    text-align: center;
+}
+/* Existing styles */
+form {
+    
+    padding: 20px;
+    border-radius: 5px;
+    margin: 20px auto; /* Center the form horizontally */
+    width: 300px; /* Set a fixed width for the form */
+}
+
+input[type="text"],
+input[type="password"],
+input[type="file"],
+input[type="submit"] {
+    width: 100%;
+    margin-bottom: 3px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-sizing: border-box;
+}
+
+input[type="submit"] {
+    background-color: #68d59f;
+    color: #fff;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #329473;
+}
+
+a {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    color:#68d59f;
+}
+
+a:hover {
+    text-decoration: none;
+    color:#329473;
+}
+
+.error-messages {
+    text-align: center;
+    font-weight: bold ;
+    color: red;
+    font-size: 14px; 
+    padding: 0;
+}
+
+.error-messages li {
+    list-style: none;
+}
+

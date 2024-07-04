@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('/static/images/bkg.jpg');
+            background-size: cover; 
+            background-position: center; 
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        header {
+            background-color: #4CAF50;
+            padding: 10px;
+            text-align: center;
+            color: white;
+        }
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        nav ul li {
+            display: inline;
+            margin-right: 20px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+        main {
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            font-size: 1.2em;
+            color: #666;
+        }
+        .technologies {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #ddd;
+            border-radius: 5px;
+            text-align: left;
+        }
+    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h1>About</h1>
+        <p>This is a project for detecting emotions and providing personalized recommendations for movies, music, games, and novels based on detected emotions.</p>
+        <div class="technologies">
+            <h2>Technologies Used</h2>
+            <ul>
+                <li><strong>Emotion Detection:</strong> We use OpenCV for real-time video capture and image processing.</li>
+                <li><strong>Deep Learning:</strong> We use Keras for building and training deep learning models.</li>
+                <li><strong>Backend:</strong> We use Flask for the backend server implementation.</li>
+                <li><strong>Frontend:</strong> We use HTML, CSS, and JavaScript for the frontend development.</li>
+                <li><strong>Fonts:</strong> We use Google Fonts for typography.</li>
+                <li><strong>Icons:</strong> We use Ionic Icons for iconography.</li>
+                <li><strong>API:</strong> We use REST API for communication between frontend and backend.</li>
+                <li><strong>Database:</strong> We use MongoDB as the database for storing data.</li>
+                <li><strong>Deployment:</strong> We deploy our application on a cloud platform for scalability.</li>
+            </ul>
+        </div>
+        
+    </main>
+</body>
+</html>

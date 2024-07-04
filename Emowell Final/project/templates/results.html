@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recommendations</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <h1>Recommendations</h1>
+    <div id="results"></div>
+    <script>
+    fetch('/get_recommendations')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log("Data:", data); 
+        let resultsDiv = document.getElementById('results');
+        resultsDiv.innerHTML = '<h2>Movies</h2>';
+        data.movies.forEach(movie => {
+            resultsDiv.innerHTML += `<p>${movie.Title}</p>`;
+        });
+        resultsDiv.innerHTML += '<h2>Music</h2>';
+        data.music.forEach(music => {
+            resultsDiv.innerHTML += `<p>${music.Title}</p>`;
+        });
+        resultsDiv.innerHTML += '<h2>Games</h2>';
+        data.games.forEach(game => {
+            resultsDiv.innerHTML += `<p>${game.Title}</p>`;
+        });
+        resultsDiv.innerHTML += '<h2>Novels</h2>';
+        data.novels.forEach(novel => {
+            resultsDiv.innerHTML += `<p>${novel.Title}</p>`;
+        });
+    })
+    .catch(error => console.error('Error:', error));
+    </script>
+</body>
+</html>

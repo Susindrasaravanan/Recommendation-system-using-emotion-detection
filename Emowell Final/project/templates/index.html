@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/static/images/webLogo.jpg" type="image/x-icon">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style-prefix.css') }}">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Ionic Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/5.0.1/ionicons.min.css">
+    <title>Emotion Based Recommendations</title>
+    <script>
+      // Smooth scrolling for internal links
+      document.addEventListener('DOMContentLoaded', () => {
+          document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+              anchor.addEventListener('click', function (e) {
+                  e.preventDefault();
+                  document.querySelector(this.getAttribute('href')).scrollIntoView({
+                      behavior: 'smooth'
+                  });
+              });
+          });
+      });
+
+      // Automatic banner slider functionality
+      let currentIndex = 0;
+      function nextBanner() {
+          const banners = document.querySelectorAll('.slider-item');
+          banners[currentIndex].classList.remove('active');
+          currentIndex = (currentIndex + 1) % banners.length;
+          banners[currentIndex].classList.add('active');
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+          setInterval(nextBanner, 3000);
+      });
+  </script>
+  <style>
+    .start-detection-btn {
+      background-color: #ff69b4; /* Pink background color */
+      color: #fff; /* White text color */
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+  }
+
+  /* Hover effect for the Start Detection button */
+  .start-detection-btn:hover {
+      background-color: #d83a87; /* Darker pink on hover */
+  }
+
+  /* Ensure only one banner is visible at a time */
+  .slider-item {
+      display: none;
+  }
+
+  .slider-item.active {
+      display: block;
+  }
+</style>  
+<style>
+
+  .title {
+      font-size: 1.5em;
+      font-weight: bold;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      text-align: center;
+      text-transform: uppercase;
+      border-bottom: 2px solid #ccc;
+      padding-top: 40px;
+      padding-bottom: 20px;
+      color: #b300b0;
+  }
+  
+  .product-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+  }
+  .showcase {
+      width: 200px;
+      margin: 5px;
+      text-align: center;
+  }
+  .showcase-banner {
+      position: relative;
+  }
+  .product-img {
+      width: 100%;
+      transition: transform 0.3s;
+  }
+  .product-img.hover {
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+  }
+  .showcase-banner:hover .product-img.hover {
+      opacity: 1;
+  }
+  .showcase-banner:hover .product-img.default {
+      opacity: 0;
+  }
+  .showcase-category {
+      display: block;
+      margin-top: 5px;
+      font-size: 0.9em;
+      color: #777;
+      text-decoration: none;
+  }
+  .showcase-title {
+      font-size: 1em;
+      color: #333;
+      text-decoration: none;
+  }
+  .pagination-buttons {
+      display: flex;
+      justify-content: center;
+      margin: 10px 0;
+  }
+  .pagination-buttons button {
+      margin: 0 10px;
+      padding: 5px 10px;
+      font-size: 1em;
+      cursor: pointer;
+  }
+
+    .styled-button {
+    /* Basic button styles */
+    display: inline-block;
+    padding: 8px 16px;
+    margin:20px;
+    font-size: 1em;
+    font-weight: bold;
+    color: #fff;
+    background-color: #0056b3; /* Button color */
+    border: 2px solid #0056b3; /* Button border color */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+  }
+
+  .styled-button:hover {
+    background-color: var(--salmon-pink); /* Darker button color on hover */
+    border-color: var(--salmon-pink); /* Darker border color on hover */
+  }
+
+</style>
+  <style>
+    .start-detection-btn {
+      background-color: #ff69b4; /* Pink background color */
+      color: #fff; /* White text color */
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+  }
+
+  /* Hover effect for the Start Detection button */
+  .start-detection-btn:hover {
+      background-color: #d83a87; /* Darker pink on hover */
+  }
+  </style>  
+</head>
+<body>
+
+  <!--    - NOTIFICATION TOAST   -->  
+  <div class="notification-toas" data-toast>
+    <button class="toast-close-btn" data-toast-close>
+      <ion-icon name=""></ion-icon>
+    </button>
+  </div>
+    
+  <!--    - HEADER   -->
+  <header>    
+    <div class="header-main">
+  <div class="container">
+    <a href="#" class="header-logo">
+      <img src="/static/images/logoMain.jpg" alt="logo" width="120" height="36">
+    </a>
+    <div class="header-search-container">        
+      <div class="header-alert-news" style="display: inline-block;">
+        <h1 style="font-size: 3em; color: var(--salmon-pink); text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); letter-spacing: 2px; display: inline;">Emowell&nbsp&nbsp</h1>
+        <p style="font-size: 1.2em; color: #333; margin-top: 20px; display: inline;">Spread smile!</p>
+      </div> 
+    </div>
+  </div>
+</div>
+
+
+    <nav class="desktop-navigation-menu">
+      <div class="container">
+        <ul class="desktop-menu-category-list">
+          <li class="menu-category">
+            <a href="#home" class="menu-title">Home</a>
+          </li>
+          <li class="menu-category">
+            <a href="{{ url_for('about') }}" class="menu-title">About</a>
+          </li>
+          <li class="menu-category">
+            <a href="#contact" class="menu-title">Contact</a>            
+          </li>
+          <li class="menu-category">
+            <a href="{{ url_for('login') }}" class="menu-title">Register/login</a>
+          </li>
+          <li class="menu-category">
+            <a href="{{ url_for('logout') }}" class="menu-title">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="mobile-bottom-navigation">
+        
+      <button class="action-btn" data-mobile-menu-open-btn>
+        <ion-icon name="menu-outline"></ion-icon>
+      </button>
+      <button class="action-btn">
+        <ion-icon name="home-outline"></ion-icon>
+      </button>
+
+      <button class="action-btn" data-mobile-menu-open-btn>
+        <ion-icon name="grid-outline"></ion-icon>
+      </button>
+
+    </div>
+
+    <nav class="mobile-navigation-menu  has-scrollbar" data-mobile-menu>
+
+      <div class="menu-top">
+        <h2 class="menu-title">Menu</h2>
+
+        <button class="menu-close-btn" data-mobile-menu-close-btn>
+          <ion-icon name="close-outline"></ion-icon>
+        </button>
+      </div>
+
+      <ul class="mobile-menu-category-list">
+
+        <li class="menu-category">
+          <a href="#" class="menu-title">Home</a>
+        </li>
+
+        <li class="menu-category">
+          <button class="accordion-menu" data-accordion-btn>
+            <p class="menu-title">About</p>          
+          </button>
+        </li>
+
+        <li class="menu-category">
+          <button class="accordion-menu" data-accordion-btn>
+            <p class="menu-title">contact us</p>
+          </button>
+        </li>
+        <li class="menu-category">
+
+          <button class="accordion-menu" data-accordion-btn>
+            <p class="menu-title">login</p>           
+          </button>
+
+        </li>
+  
+
+        <li class="menu-category">
+
+          <button class="accordion-menu" data-accordion-btn>
+            <p class="menu-title">log out</p>           
+          </button>
+
+        </li>
+
+
+       <!-- <li class="menu-category">
+          <a href="#" class="menu-title">Blog</a>
+        </li>
+
+        <li class="menu-category">
+          <a href="#" class="menu-title">Hot Offers</a>
+        </li>-->
+
+      </ul>
+
+      <div class="menu-bottom">
+
+       
+        <ul class="menu-social-container" id="home">
+            <a href="#" class="social-link">
+              <ion-icon name="logo-linkedin"></ion-icon>
+            </a>
+        </ul>
+
+      </div>
+
+    </nav>
+
+  </header>
+
+  <main>
+   <!--
+      - BANNER
+    -->
+    <div class="banner">
+
+        <div class="container">
+  
+          <div class="slider-container has-scrollbar" id="bannerSlider">
+  
+            <div class="slider-item">
+  
+              <img src="./static/images/banner-2.1.jpg" alt="women's latest fashion sale" class="banner-img">
+  
+              <div class="banner-content">
+  
+                <p class="banner-subtitle">Emotion Detection and</p>
+  
+                <h2 class="banner-title">Recommendation</h2>
+  
+                <p class="banner-text">
+                  happiness here <b>3</b>.0
+                </p>
+  
+                <a class="banner-btn">Start here</a>
+  
+              </div>
+  
+            </div>
+  
+            <div class="slider-item">
+  
+              <img src="./static/images/banner-3.1.jpg" alt="modern sunglasses" class="banner-img">
+  
+              <div class="banner-content">
+  
+                <p class="banner-subtitle">Trending movies and novels</p>
+
+                <p class="banner-text">
+                  Take adventure through exciting movies and great novels
+                </p>
+  
+                <a class="banner-btn">get through here</a>
+  
+              </div>
+  
+            </div>
+  
+            <div class="slider-item">
+  
+              <img src="./static/images/banner-3.2.jpeg" alt="new fashion summer sale" class="banner-img">
+  
+              <div class="banner-content">
+  
+                <p class="banner-subtitle">Get much comfortable</p>
+  
+                <h2 class="banner-title">Through soul taking songs and time taking games</h2>
+  
+                <a class="banner-btn">Start it now!</a>
+  
+              </div>
+  
+            </div>
+  
+          </div>
+  
+        </div>
+  
+      </div>
+
+        <!--
+      - CATEGORY
+    -->
+      
+
+
+
+    <div style="display: flex; flex-direction: column; align-items: center;">
+    <h1>Emotion Detection</h1>
+    <div>
+        <img src="{{ url_for('video_feed') }}" width="600" height="400" style="border: 4px solid #ccc; border-radius: 8px; padding:5px; margin:5px">
+    </div>
+    <div><form action="{{ url_for('start_detection') }}" method="POST">
+      <button type="submit" class="styled-button">Start Detection</button>
+    </form></div>
+    <div>
+        <button onclick="fetchRecommendations()" class="banner-btn">Get Recommendations</button>
+    </div>
+    </div>
+    <div class="product-container">
+        <div class="product-box">
+            <div class="product-main">
+                <div id="results"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function fetchRecommendations() {
+            fetch('/get_recommendations')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("Data:", data);
+                let resultsDiv = document.getElementById('results');
+                resultsDiv.innerHTML = '';
+
+                // Function to create HTML structure for each recommendation
+                function createRecommendationSection(title, items) {
+                    let sectionHTML = `<h2 class="title">${title}</h2><div class="product-grid">`;
+                    items.forEach(item => {
+                        sectionHTML += `
+                        <div class="showcase">
+                            <div class="showcase-banner">
+                                <a href="${item.redirectLink}" target="_blank" style="cursor: pointer;">
+                                <img src="${item.link}" alt="${item.Title}" width="300" class="product-img default">
+                                <img src="${item.link}" alt="${item.Title}" width="300" class="product-img hover">
+                                </a>
+                            </div>
+                            <div class="showcase-content">
+                                <a href="#" class="showcase-category">${title.slice(0, -1)}</a>
+                                <a href="${item.redirectLink}" target="_blank"> 
+                                    <h3 class="showcase-title">${item.Title}</h3>
+                                </a>                             
+                            </div>
+                        </div>`;
+                    });
+                    sectionHTML += `</div>`;
+                    return sectionHTML;
+                }
+
+                // Add sections for each category
+                resultsDiv.innerHTML += createRecommendationSection('Movies', data.movies);
+                resultsDiv.innerHTML += createRecommendationSection('Music', data.music);
+                resultsDiv.innerHTML += createRecommendationSection('Games', data.games);
+                resultsDiv.innerHTML += createRecommendationSection('Novels', data.novels);
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+
+    </main>
+
+<footer>
+
+    <div class="footer-category">    
+
+    </div>
+
+    <div class="footer-nav">
+
+      <div class="container">
+
+        
+
+        <ul class="footer-nav-list">
+
+          <li class="footer-nav-item">
+            <h2 class="nav-title" id="contact">Contact</h2>
+          </li>
+
+          <li class="footer-nav-item flex">
+            <div class="icon-box">
+              <ion-icon name="location-outline"></ion-icon>
+            </div>
+
+            <address class="content">
+              VIT,
+              Vellore Institute of Technology, 
+              Katpadi
+            </address>
+          </li>
+
+          <li class="footer-nav-item flex">
+            <div class="icon-box">
+              <ion-icon name="call-outline"></ion-icon>
+            </div>
+
+            <a href="tel:+0000000000" class="footer-nav-link">999999999</a>
+          </li>
+
+          <li class="footer-nav-item flex">
+            <div class="icon-box">
+              <ion-icon name="mail-outline"></ion-icon>
+            </div>
+
+            <a href="mailto:example@gmail.com" class="footer-nav-link">example@gmail.com</a>
+          </li>
+
+        </ul>
+
+        <ul class="footer-nav-list">
+
+          
+
+        </ul>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+
+      <div class="container">
+
+        
+
+        <p class="copyright">
+          Copyright &copy; <a href="#">5stars</a> all rights reserved.
+        </p>
+
+      </div>
+
+    </div>
+
+  </footer>
+
+</body>
+</html>
